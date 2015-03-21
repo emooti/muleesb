@@ -9,4 +9,4 @@ RUN apt-get update
 # /var/lib/tomcat7 /etc/tomcat7 /usr/share/tomcat7 /usr/share/tomcat7/bin/startup.sh /usr/share/tomcat7/log
 RUN mkdir -p /usr/share/tomcat7/log
 CMD ["/usr/share/tomcat7/bin/startup.sh"]
-EXPOSE 80
+EXPOSE 8080
