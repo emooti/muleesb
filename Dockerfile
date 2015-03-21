@@ -7,5 +7,5 @@ RUN apt-get -y install openjdk-7-jre openjdk-7-jdk
 RUN apt-get -y install tzdata tzdata-java tomcat7
 RUN apt-get update
 # /var/lib/tomcat7 /etc/tomcat7 /usr/share/tomcat7 /usr/share/tomcat7/bin/startup.sh /usr/share/tomcat7/log
-RUN mkdir /usr/share/tomcat7/log
-RUN /usr/share/tomcat7/bin/startup.sh
+CMD mkdir /usr/share/tomcat7/log
+CMD /usr/share/tomcat7/bin/startup.sh
