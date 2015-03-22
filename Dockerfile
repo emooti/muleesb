@@ -18,8 +18,8 @@ VOLUME ["/var/lib/tomcat7/webapps/"]
 # /var/lib/tomcat7 /etc/tomcat7 /usr/share/tomcat7 /usr/share/tomcat7/bin/startup.sh /usr/share/tomcat7/log
 RUN mkdir -p /usr/share/tomcat7/logs
 #bug in ap-get tomcat7
-COPY $CATALINA_BASE/common $CATALINA_HOME/common
-COPY $CATALINA_BASE/server $CATALINA_HOME/server
-COPY $CATALINA_BASE/shared $CATALINA_HOME/shared
+COPY $CATALINA_BASE/common/ $CATALINA_HOME/common/
+COPY $CATALINA_BASE/server/ $CATALINA_HOME/server/
+COPY $CATALINA_BASE/shared/ $CATALINA_HOME/shared/
 EXPOSE 8080
 #CMD ["/usr/share/tomcat7/bin/startup.sh"]
