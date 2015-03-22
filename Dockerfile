@@ -3,8 +3,8 @@ FROM ubuntu:14.04
 MAINTAINER Uta Kapp "utakapp@gmail.com"
 RUN apt-get update
 RUN apt-get -y install curl vim git maven 
-#RUN apt-get -y install openjdk-7-jre
-RUN apt-get -y install openjdk-7-jre openjdk-7-jdk
+RUN apt-get -y install openjdk-7-jre
+#RUN apt-get -y install openjdk-7-jre openjdk-7-jdk
 #RUN apt-get -y install tzdata tzdata-java tomcat7
 RUN apt-get -y install tomcat7
 RUN apt-get update
@@ -22,4 +22,4 @@ RUN cp -R /var/lib/tomcat7/common/ /usr/share/tomcat7/common/
 RUN cp -R /var/lib/tomcat7/server/ /usr/share/tomcat7/server/
 RUN cp -R /var/lib/tomcat7/shared/ /usr/share/tomcat7/shared/
 EXPOSE 8080
-#CMD ["/usr/share/tomcat7/bin/startup.sh"]
+CMD ["/usr/share/tomcat7/bin/catalina.sh", "run"]
