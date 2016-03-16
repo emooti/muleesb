@@ -1,4 +1,4 @@
-#dockerfile/emooti
+#dockerfile/emooti/emootidocker
 FROM ubuntu:14.04
 MAINTAINER Uta Kapp "utakapp@gmail.com"
 RUN apt-get update
