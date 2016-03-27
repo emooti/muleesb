@@ -1,6 +1,6 @@
 #dockerfile/emooti/emootidocker
 FROM ubuntu:14.04
-MAINTAINER Uta Kapp "utakapp@gmail.com"
+MAINTAINER Uta Kapp "uta.kapp@emooti.org"
 RUN apt-get update
 RUN apt-get -y install curl vim git maven
 RUN apt-get -y install openjdk-7-jre
