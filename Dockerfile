@@ -1,4 +1,5 @@
 #dockerfile/emooti/emootidocker
+# Setup Tomcat7 server
 FROM ubuntu:14.04
 MAINTAINER Uta Kapp "uta.kapp@emooti.org"
 RUN apt-get update
