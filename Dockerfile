@@ -1,28 +1,49 @@
-#dockerfile/emooti/emootidocker
-# Setup Tomcat7 server
-FROM ubuntu:14.04
+# dockerfile/emooti/muleesb
+# Mule Standalone
+FROM                    dockerfile/java:latest
 MAINTAINER Uta Kapp "uta.kapp@emooti.org"
-RUN apt-get update
-RUN apt-get -y install curl vim git maven
-RUN apt-get -y install openjdk-7-jre
-#RUN apt-get -y install openjdk-7-jre openjdk-7-jdk
-#RUN apt-get -y install tzdata tzdata-java tomcat7
-# apt-get install tomcat7-docs tomcat7-admin tomcat7-examples
-RUN apt-get -y install tomcat7 tomcat7-admin
-RUN apt-get update
-ENV CATALINA_HOME /usr/share/tomcat7
-ENV CATALINA_BASE /var/lib/tomcat7
-ENV CATALINA_PID /var/run/tomcat7.pid
-ENV CATALINA_SH /usr/share/tomcat7/bin/catalina.sh
-ENV CATALINA_TMPDIR /tmp/tomcat7-tomcat7-tmp
-RUN mkdir -p $CATALINA_TMPDIR
-VOLUME ["/var/lib/tomcat7/webapps/"]
-# /var/lib/tomcat7 /etc/tomcat7 /usr/share/tomcat7 /usr/share/tomcat7/bin/startup.sh /usr/share/tomcat7/log
-RUN mkdir -p /usr/share/tomcat7/logs
-#bug in ap-get tomcat7
-RUN cp -R /var/lib/tomcat7/common/ /usr/share/tomcat7/common/
-RUN cp -R /var/lib/tomcat7/server/ /usr/share/tomcat7/server/
-RUN cp -R /var/lib/tomcat7/shared/ /usr/share/tomcat7/shared/
-RUN sed -i -- 's/<Context>/<Context reloadable="true">/g' /var/lib/tomcat7/conf/context.xml
-EXPOSE 8080
-#CMD ["/usr/share/tomcat7/bin/catalina.sh", "run"]
+
+# MuleEE installation:
+# This line can reference either a web url (ADD), network share or local file (COPY)
+COPY                    ./mmc-distribution-mule-console-bundle-3.5.1.tar.gz /opt/
+
+WORKDIR                 /opt
+RUN                     echo "1acdd312c460c9561690179e76561c86 mmc-distribution-mule-console-bundle-3.5.1.tar.gz" | md5sum -c
+RUN                     tar -xzvf /opt/mmc-distribution-mule-console-bundle-3.5.1.tar.gz
+RUN                     ln -s mmc-distribution-mule-console-bundle-3.5.1/mule-enterprise-3.5.1 mule
+RUN                     rm -f  mmc-distribution-mule-console-bundle-3.5.1.tar.gz
+
+# Copy the license key, keep the license conditions in mind!
+WORKDIR                 /opt/mmc-distribution-mule-console-bundle-3.5.1/mule-enterprise-3.5.1
+RUN                     rm -Rf .mule
+ADD                     ./mule-ee-license.lic /opt/mmc-distribution-mule-console-bundle-3.5.1/mule-enterprise-3.5.1/conf/
+RUN                     bin/mule -installLicense conf/mule-ee-license.lic
+RUN                     rm -f conf/mule-ee-license.lic
+RUN                     rm -Rf apps/default*
+RUN                     rm -Rf examples
+
+# Remove things that we don't need in production:
+WORKDIR                 /opt/
+RUN                     rm -f  mmc-distribution-mule-console-bundle-3.5.1.tar.gz
+RUN                     rm -Rf mmc-distribution-mule-console-bundle-3.5.1/mmc-3.5.1
+RUN                     rm -f mmc-distribution-mule-console-bundle-3.5.1/startup*
+RUN                     rm -f mmc-distribution-mule-console-bundle-3.5.1/shutdown*
+RUN                     rm -f mmc-distribution-mule-console-bundle-3.5.1/status*
+
+# Configure external access:
+
+# Mule remote debugger
+EXPOSE  5000
+
+# Mule JMX port (must match Mule config file)
+EXPOSE  1098
+
+# Mule MMC agent port
+EXPOSE  7777
+
+# Environment and execution:
+
+ENV             MULE_BASE /opt/mule
+WORKDIR         /opt/mule-enterprise-3.5.1
+
+CMD             /opt/mule/bin/mule
