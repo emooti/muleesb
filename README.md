@@ -1,3 +1,2 @@
-# emootidocker
-Docker Files for Automatic Builds
-This Dockerfile sets up and runs Tomcat
+# muleesb
+Mule standalone Dockerfile
